@@ -96,6 +96,9 @@ class PythonCompilerScreenState extends State<PythonCompilerScreen> {
               ],
             ),
             const SizedBox(height: 16),
+            const Text("Output",style: TextStyle(
+              fontSize: 20,
+            ),),
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
