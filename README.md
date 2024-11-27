@@ -9,7 +9,7 @@ for frontend
 run : flutter run 
 
 for backend
-run : pyhthon3 app.py
+run : python3 app.py
 
 This project is capable of running as well as identifies the error also.
 this can interact with user for input and produce the output for same also.
