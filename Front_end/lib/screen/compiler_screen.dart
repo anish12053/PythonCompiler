@@ -36,12 +36,12 @@ class PythonCompilerScreenState extends State<PythonCompilerScreen> {
         });
       } else {
         setState(() {
-          _output = "Error: Could not connect to the server.";
+          _output = "Error: Server responded with status ${response.statusCode}.";
         });
       }
     } catch (e) {
       setState(() {
-        _output = "Error: $e";
+        _output = "Error: Unable to connect to the server. $e";
       });
     }
   }
@@ -58,60 +58,83 @@ class PythonCompilerScreenState extends State<PythonCompilerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Python Compiler'),
+        title: const Text("Python Compiler"),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _codeController,
-              maxLines: 10,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter Python code here...',
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _inputController,
-              maxLines: 10,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter Input',
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: _runCode,
-                  child: const Text('Run'),
-                ),
-                ElevatedButton(
-                  onPressed: _clearInput,
-                  child: const Text('Clear'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Text("Output",style: TextStyle(
-              fontSize: 20,
-            ),),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  _output,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        "Python Code:",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _codeController,
+                        maxLines: 10,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Enter your Python code here...",
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Input for Code (optional):",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _inputController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Enter any input required for your code...",
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: _runCode,
+                            child: const Text("Run Code"),
+                          ),
+                          ElevatedButton(
+                            onPressed: _clearInput,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.redAccent,
+                            ),
+                            child: const Text("Clear"),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          color: Colors.grey.shade200,
+                          child: SingleChildScrollView(
+                            child: Text(
+                              _output,
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
